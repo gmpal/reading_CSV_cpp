@@ -9,6 +9,7 @@ column names at the top.*/
 #include <stdexcept> //for std::runtime_error
 #include <sstream> //fir std::stringstream
 #include <iostream> 
+#include <algorithm>
 
 std::vector<std::pair<std::string, std::vector<float>>> read_csv(std::string filename)
 {
@@ -130,22 +131,81 @@ void print_dataset(std::vector<std::pair<std::string, std::vector<float>>> datas
     
 }
 
+
+
 std::vector<float> sort_single_vector(std::vector<float> vector){
-    std::vector<float> sorted;
-
-    sorted = sort(vector.begin(), vector.end());
-
+    std::vector<float> sorted(vector);
+    std::sort(sorted.begin(), sorted.end());
     return sorted; 
 }
 
+/*Sorts vector 2 following the sorting of vector1*/
+/*std::pair<std::vector<float>, std::vector<float>>*/void sort_unison(std::vector<float> vector1, std::vector<float> vector2)
+{
+    int size = vector1.size();
+
+    //Initialize index vector
+    std::vector<int> index(size, 0);
+    std::vector<int> v1_sorted(size, 0);
+    std::vector<int> v2_sorted(size, 0);
+
+    //Fill up index vector
+    for (int i = 0 ; i != size ; i++) {
+        index[i] = i;
+    }
+
+    //Sort index based on the corresponding values of vector1
+    sort(index.begin(), index.end(),
+    [&](const int& a, const int& b) {
+        return (vector1[a] < vector1[b]);
+    });
+
+
+    for (int i = 0 ; i != size ; i++) {
+    v1_sorted[i] = vector1[index[i]];
+    v2_sorted[i] = vector2[index[i]];
+    }
+    
+
+  
+}
+
+
+
+
+
+
+
 int main() 
 {
+
+    /*
     std::vector<std::pair<std::string, std::vector<float>>> dataset; 
     
     dataset = read_csv("iris.csv");
 
-    print_dataset(dataset);
+    int col_nums = dataset.size();
+    
+    for(int i = 0; i < col_nums; ++i){
+        std::string column_name = dataset.at(i).first;
+        std::vector<float> elements = dataset.at(i).second;
+        std::vector<float> sorted = sort_single_vector(elements);
 
+        for (auto x: elements) std::cout << x << '|';
+        std::cout << "\n";
+        for (auto x: sorted) std::cout << x << ',';
+        std::cout << "\n\n";
+
+    }
+    */
+
+    std::vector<float> arr = {5, 16, 4, 7}; 
+    std::vector<float> arr2 = {10, 20, 30, 40}; 
+
+    std::vector<float> arr1_sorted; 
+    std::vector<float> arr2_sorted_unison;
+
+    sort_unison(arr,arr2);
     return 0;
 
 }
