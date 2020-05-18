@@ -110,28 +110,7 @@ void create_floats_dataset(){
     write_csv("floats2.csv",values); 
 }
 
-void print_dataset(std::vector<std::pair<std::string, std::vector<float>>> dataset){
-    
-    int col_nums = dataset.size();
-    int row_nums = dataset.at(0).second.size();
-
-    for(int i = 0; i < col_nums; ++i){
-        std::string column_name = dataset.at(i).first;
-        std::vector<float> elements = dataset.at(i).second;
-        
-        std::cout << "Column: " << column_name << "\t\t";
-        
-        for(int j = 0; j < row_nums - 1; ++j){
-            std::cout << elements.at(j) << " | ";
-        }
-        std::cout << elements.at(row_nums -1) << ".";
-
-        std::cout << "\n";
-    }
-    
-}
-
-void print_dataset_2(std::vector<std::pair<std::string, std::vector<float>>> dataset, int num_instances = -1){
+void print_dataset(std::vector<std::pair<std::string, std::vector<float>>> dataset, int num_instances = -1){
     
     int col_nums = dataset.size();
     int row_nums;
@@ -176,23 +155,6 @@ void print_dataset_2(std::vector<std::pair<std::string, std::vector<float>>> dat
         std::cout << "\n";
     }
 
-    
-  
-
-
-    /*
-     for(int i = 0; i < col_nums; ++i){
-    std::vector<float> elements = dataset.at(i).second;
-        
-        std::cout << "Column: " << column_name << "\t\t";
-        
-        for(int j = 0; j < row_nums - 1; ++j){
-            std::cout << elements.at(j) << " | ";
-        }
-        std::cout << elements.at(row_nums -1) << ".";
-
-        std::cout << "\n";
-    */
 }
 
 /*Returns a copy of the sorted vector*/
@@ -246,10 +208,28 @@ void print_vector(std::vector<float> vector){
     
     for (int i = 0 ; i < size-1 ; i++){
         std::cout << vector.at(i) << ',';
+        //if (i > 1 && (i+1)%10 == 0) std::cout << "\n";
     }
     std::cout << vector.at(size-1) << '.' << "\n";
 }
 
+std::vector<float> get_column(std::vector<std::pair<std::string, std::vector<float>>> dataset, std::string column_name){
+    int row_nums = dataset.at(0).second.size();
+    int col_nums = dataset.size();
+    
+    std::vector<float> result(row_nums,0);
+    std::string column;
+
+    for (int i = 0; i < col_nums; ++i){
+        column = dataset.at(i).first;
+        if (column == column_name) {
+            result = dataset.at(i).second;
+        }
+    }
+
+    
+    return result;
+}
 
 
 
@@ -263,7 +243,20 @@ int main()
     
     dataset = read_csv("iris.csv");
 
-    print_dataset(dataset,10); 
+    //print_dataset(dataset,10); 
+
+    std::vector<float> y = get_column(dataset, "class");
+    std::vector<float> x_0 = get_column(dataset, "sepal_length");
+    print_vector(x_0);
+    print_vector(y);
+
+    std::pair<std::vector<float>, std::vector<float>> sorted_pair =  sort_unison(x_0,y);
+    //print_vector(sorted_pair.first);
+    //print_vector(sorted_pair.second);
+
+    std::vector<std::pair<std::string, std::vector<float>>> representation = {{"first",sorted_pair.first},{"second",sorted_pair.second}};
+    
+    print_dataset(representation);
     
 
     /*
