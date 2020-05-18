@@ -140,14 +140,18 @@ std::vector<float> sort_single_vector(std::vector<float> vector){
 }
 
 /*Sorts vector 2 following the sorting of vector1*/
-/*std::pair<std::vector<float>, std::vector<float>>*/void sort_unison(std::vector<float> vector1, std::vector<float> vector2)
+std::pair<std::vector<float>, std::vector<float>> sort_unison(std::vector<float> vector1, std::vector<float> vector2)
 {
+
+
+    std::pair<std::vector<float>, std::vector<float>> result; 
+
     int size = vector1.size();
 
     //Initialize index vector
     std::vector<int> index(size, 0);
-    std::vector<int> v1_sorted(size, 0);
-    std::vector<int> v2_sorted(size, 0);
+    std::vector<float> v1_sorted(size, 0);
+    std::vector<float> v2_sorted(size, 0);
 
     //Fill up index vector
     for (int i = 0 ; i != size ; i++) {
@@ -160,16 +164,28 @@ std::vector<float> sort_single_vector(std::vector<float> vector){
         return (vector1[a] < vector1[b]);
     });
 
-
+    //sort the two vectors based on the commond sorting index
     for (int i = 0 ; i != size ; i++) {
     v1_sorted[i] = vector1[index[i]];
     v2_sorted[i] = vector2[index[i]];
     }
     
+    //pass them as a pair
+    result = {v1_sorted, v2_sorted};
 
-  
+    return result; 
+    
 }
 
+void print_vector(std::vector<float> vector){
+    
+    int size = vector.size();
+    
+    for (int i = 0 ; i < size-1 ; i++){
+        std::cout << vector.at(i) << ',';
+    }
+    std::cout << vector.at(size-1) << '.' << "\n";
+}
 
 
 
@@ -193,19 +209,23 @@ int main()
 
         for (auto x: elements) std::cout << x << '|';
         std::cout << "\n";
-        for (auto x: sorted) std::cout << x << ',';
-        std::cout << "\n\n";
-
+       
     }
     */
 
     std::vector<float> arr = {5, 16, 4, 7}; 
     std::vector<float> arr2 = {10, 20, 30, 40}; 
 
-    std::vector<float> arr1_sorted; 
-    std::vector<float> arr2_sorted_unison;
+    std::pair<std::vector<float>, std::vector<float>> sorted_couple; 
 
-    sort_unison(arr,arr2);
+    sorted_couple = sort_unison(arr,arr2);
+
+    std::vector<float> sorted_x = sorted_couple.first;
+    std::vector<float> sorted_y = sorted_couple.second;
+
+    print_vector(sorted_x);
+    print_vector(sorted_y);
+
     return 0;
 
 }
