@@ -263,7 +263,7 @@ int main()
     
     dataset = read_csv("iris.csv");
 
-    print_dataset_2(dataset,10); 
+    print_dataset(dataset,10); 
     
 
     /*
